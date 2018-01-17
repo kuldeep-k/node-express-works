@@ -29,4 +29,38 @@ router.get('/', function (req, res) {
 
 });
 
+// RETURNS USER DETAILS IN THE DATABASE
+router.get('/:id', function (req, res) {
+  console.log("IN GET")
+    User.findOne({"_id":req.params.id}, function (err, users) {
+        if (err) return res.status(500).send("There was a problem finding the users.");
+        res.status(200).send(users);
+    });
+
+});
+
+// UPDATE USER DETAILS IN THE DATABASE
+router.put('/:id', function (req, res) {
+  console.log("IN GET")
+    User.update({"_id":req.params.id}, {
+        name : req.body.name,
+        email : req.body.email,
+        password : req.body.password
+    }, function (err, users) {
+        if (err) return res.status(500).send("There was a problem finding the users.");
+        res.status(200).send(users);
+    });
+
+});
+
+// DELETE USER FROM THE DATABASE
+router.delete('/:id', function (req, res) {
+  console.log("IN GET")
+    User.remove({"_id":req.params.id}, function (err, users) {
+        if (err) return res.status(500).send("There was a problem finding the users.");
+        res.status(200).send(users);
+    });
+
+});
+
 module.exports = router;

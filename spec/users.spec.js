@@ -29,7 +29,7 @@ describe("Users List API Exists", function() {
       });
     });*/
 
-    it("API Response should be valid array of json objects", function(done) {
+    it("API Response should be valid array of json objects 1", function(done) {
       request.get(base_url, function(error, response, body) {
         // console.log(typeof body);
         //  body = 'Hello World';
@@ -41,7 +41,7 @@ describe("Users List API Exists", function() {
       });
     });
 
-    it("API Response should be valid array of user objects", function(done) {
+    it("API Response should be valid array of user objects 2", function(done) {
       request.get(base_url, function(error, response, body) {
         let users = JSON.parse(body);
         const userRows = users.map((userRow) => {

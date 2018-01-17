@@ -14,7 +14,7 @@
   "devDependencies": {},
   "scripts": {
     "test": "jasmine-node spec",
-    "start": "node server.js"
+    "start": "node app.js"
   },
   "author": "",
   "license": "ISC"
