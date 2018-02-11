@@ -1,13 +1,13 @@
 var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
-router.use(bodyParser.urlencoded({ extended: true }));
+// router.use(bodyParser.urlencoded({ extended: true }));
+router.use(bodyParser.json());
 
 var User = require('../models/User');
 
 router.post('/', function (req, res) {
-  console.log("IN POST")
-console.log(req);
+console.log("IN POST")
 User.create({
     email : req.body.email,
     firstName : req.body.firstName,
