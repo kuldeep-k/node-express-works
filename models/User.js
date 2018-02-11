@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 var UserSchema = new mongoose.Schema({
   firstName: { type: String },
   lastName: { type: String },
@@ -9,6 +10,16 @@ var UserSchema = new mongoose.Schema({
   occupation: { type: String },
   currentLocation: { type: String },
   permLocation: { type: String }
+});
+UserSchema.pre('save', function (next) {
+  var user = this;
+  bcrypt.hash(user.password, 10, function (err, hash){
+    if (err) {
+      return next(err);
+    }
+    user.password = hash;
+    next();
+  })
 });
 mongoose.model('User', UserSchema);
 
