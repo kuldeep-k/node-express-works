@@ -6,6 +6,8 @@ var mongoose = require('mongoose');
 router.use(bodyParser.json());
 
 var User = require('../models/User');
+var UserService = require('../services/UserService');
+const userService = new UserService()
 
 router.post('/', function (req, res) {
   console.log("IN POST")
@@ -48,22 +50,40 @@ router.post('/', function (req, res) {
 // RETURNS ALL THE USERS IN THE DATABASE
 router.get('/', function (req, res) {
   console.log("IN GET")
-    User.find({}, function (err, users) {
-        if (err) return res.status(500).send("There was a problem finding the users.");
-        const list = users.map((row) => {
-          return {
-            email : row.email,
-            firstName : row.firstName,
-            lastName : row.lastName,
-            dob : row.dob,
-            education : row.education,
-            occupation : row.occupation,
-            currentLocation : row.currentLocation,
-            perLocation : row.perLocation
-          }
-        });
-        res.status(200).send(list);
-    });
+
+  let query = {
+    filter: {}
+  };
+  let page = 1;
+  let pageSize = 10;
+  if(req.query.page) {
+    if(req.query.pageSize) {
+      pageSize = req.query.pageSize;
+    }
+
+    query.offset = ( req.query.page - 1 ) * pageSize;
+    query.limit = pageSize;
+  }
+
+  query.sortOrder = -1;
+  if(req.query.sortBy) {
+    query.sortBy = req.query.sortBy;
+    query.sortOrder = (req.query.sortOrder === 'desc')?-1:1;
+  }
+
+  //console.log(query);
+  userService.getUsers(query, function(err, response){
+    if(err) {
+      res.status(500).send('Error' );
+    }
+    
+    res.status(200).send(response);
+  });
+
+
+
+
+    // });
 
 });
 
