@@ -50,18 +50,24 @@ router.post('/', function (req, res) {
 // RETURNS ALL THE USERS IN THE DATABASE
 router.get('/', function (req, res) {
   console.log("IN GET")
-
+  let filters = {};
+  for(v in req.query) {
+    if(!(v === 'sortBy' || v === 'sortOrder' || v === 'page' || v === 'pageSize')) {
+      filters[v] = { $regex: req.query[v], $options: 'i' };
+    }
+  }
   let query = {
-    filter: {}
+    filter: filters
   };
   let page = 1;
   let pageSize = 10;
   if(req.query.page) {
     if(req.query.pageSize) {
-      pageSize = req.query.pageSize;
+      pageSize = Number(req.query.pageSize);
     }
-
-    query.offset = ( req.query.page - 1 ) * pageSize;
+    page = Number(req.query.page) + 1;
+    // console.log(Number(req.query.page));
+    query.offset = ( page - 1 ) * pageSize;
     query.limit = pageSize;
   }
 
@@ -74,10 +80,11 @@ router.get('/', function (req, res) {
   //console.log(query);
   userService.getUsers(query, function(err, response){
     if(err) {
-      res.status(500).send('Error' );
+      res.status(500).send('Error ' + err );
+    } else {
+
+      res.status(200).send(response);
     }
-    
-    res.status(200).send(response);
   });
 
 
