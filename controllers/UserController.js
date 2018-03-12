@@ -21,9 +21,10 @@ router.post('/', function (req, res) {
   userObj.occupation = req.body.occupation;
   userObj.currentLocation = req.body.currentLocation;
   userObj.perLocation = req.body.perLocation;
+  console.log(userObj)
   userObj.save(function(err, results) {
     if(err) {
-      return res.status(500).send("Some error occured.");
+      return res.status(500).send("Some error occured." + err);
     }
     return res.status(201).send("User info added.");
   });
