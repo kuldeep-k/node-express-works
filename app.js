@@ -21,8 +21,11 @@ app.use(function (req, res, next) {
     next();
 });
 
-var UserController = require('./controllers/UserController');
-app.use('/users', UserController);
+// var UserController = require('./controllers/UserController');
+// var AuthController = require('./controllers/AuthController');
+
+app.use('/users', require('./controllers/UserController'));
+app.use('/auth', require('./controllers/AuthController'));
 
 var port = process.env.PORT || 3000;
 
