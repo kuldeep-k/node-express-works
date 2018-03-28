@@ -4,6 +4,7 @@ var router = express.Router();
 var bodyParser = require('body-parser');
 var verifyToken = require('../services/verifyToken');
 var passport = require('passport');
+const config = require('../config/config');
 // var passport = require('../services/passport');
 require('../services/passport');
 // router.use(bodyParser.urlencoded({ extended: true }));
@@ -20,7 +21,7 @@ router.post('/signIn', function (req, res, next) {
                 res.status(401).send({success: false, msg: err});  
             } else {
               var token = jwt.sign({ id: user.id, email: user.email, fullName: user.firstName + ' ' + user.lastName }, 
-                'UPLeQWoNzWmp9DW72FRwlzHEqeG6DKCB', {
+                config.jwt.secret, {
                 expiresIn: 86400 // expires in 24 hours
               });
               return res.json({success: true, token: token}); 
