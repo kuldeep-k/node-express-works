@@ -11,7 +11,7 @@ var User = require('../models/User');
 var UserService = require('../services/UserService');
 const userService = new UserService()
 
-router.post('/', verifyToken, function (req, res) {
+router.post('/', function (req, res) {
   console.log("IN POST")
   const userObj = new User();
   userObj.email = req.body.email;
@@ -51,7 +51,7 @@ router.post('/', verifyToken, function (req, res) {
 });
 
 // RETURNS ALL THE USERS IN THE DATABASE
-router.get('/', verifyToken, function (req, res) {
+router.get('/', function (req, res) {
   console.log("IN GET")
   let filters = {};
   for(v in req.query) {
@@ -98,7 +98,7 @@ router.get('/', verifyToken, function (req, res) {
 });
 
 // RETURNS USER DETAILS IN THE DATABASE
-router.get('/:id', verifyToken, function (req, res) {
+router.get('/:id', function (req, res) {
   console.log("IN GET")
     User.findOne({"_id":req.params.id}, function (err, user) {
         if (err) return res.status(500).send("There was a problem finding the users.");
@@ -117,7 +117,7 @@ router.get('/:id', verifyToken, function (req, res) {
 });
 
 // UPDATE USER DETAILS IN THE DATABASE
-router.put('/:id', verifyToken, function (req, res) {
+router.put('/:id', function (req, res) {
   console.log("IN PUT")
 
   User.findOne({_id: mongoose.Types.ObjectId(req.params.id)}, function(err, userObj){
@@ -162,7 +162,7 @@ router.put('/:id', verifyToken, function (req, res) {
 });
 
 // DELETE USER FROM THE DATABASE
-router.delete('/:id', verifyToken, function (req, res) {
+router.delete('/:id', function (req, res) {
   console.log("IN GET")
   User.remove({"_id":req.params.id}, function (err, users) {
     if (err) return res.status(500).send("There was a problem finding the users.");

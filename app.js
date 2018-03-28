@@ -2,7 +2,8 @@ var express = require('express');
 var app = express();
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/test');
-
+const passport    = require('passport');
+require('./services/passport');
 app.use(function (req, res, next) {
     // Website you wish to allow to connect
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -24,7 +25,7 @@ app.use(function (req, res, next) {
 // var UserController = require('./controllers/UserController');
 // var AuthController = require('./controllers/AuthController');
 
-app.use('/users', require('./controllers/UserController'));
+app.use('/users', passport.authenticate('jwt', {session: false}), require('./controllers/UserController'));
 app.use('/auth', require('./controllers/AuthController'));
 
 var port = process.env.PORT || 3000;
