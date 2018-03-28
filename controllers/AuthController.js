@@ -3,13 +3,33 @@ var jwt = require('jsonwebtoken');
 var router = express.Router();
 var bodyParser = require('body-parser');
 var verifyToken = require('../services/verifyToken');
-
+var passport = require('passport');
+// var passport = require('../services/passport');
+require('../services/passport');
 // router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 var User = require('../models/User');
 
-router.post('/signIn', function (req, res) {
-    User.findOne({
+router.post('/signIn', function (req, res, next) {
+    passport.authenticate('local', {session: false}, (err, user, info) => {
+      if (err && !user) {
+        res.status(401).send({success: false, msg: 'Login Failed'});  
+      } else {
+        req.login(user, {session: false}, function(err) {
+            if(err) {
+                res.status(401).send({success: false, msg: err});  
+            } else {
+              var token = jwt.sign({ id: user.id, email: user.email, fullName: user.firstName + ' ' + user.lastName }, 
+                'UPLeQWoNzWmp9DW72FRwlzHEqeG6DKCB', {
+                expiresIn: 86400 // expires in 24 hours
+              });
+              return res.json({success: true, token: token}); 
+            }
+        });
+      }
+      
+      
+    /*User.findOne({
         email : req.body.email
     },
     function (err, user) {
@@ -33,8 +53,8 @@ router.post('/signIn', function (req, res) {
                 res.status(401).send({success: false, msg: 'Authentication failed. Wrong password.'});
             }
         });
-        }
-    });
+        }*/
+    })(req,res,next);
 });
 
 // LOG OUT USER
