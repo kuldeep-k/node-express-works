@@ -12,14 +12,20 @@ app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
 
     // Request headers you wish to allow
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type,accept');
+    res.setHeader('Access-Control-Allow-Headers', 'Access-Control-Allow-Origin,authorization,X-Requested-With,content-type,accept');
 
     // Set to true if you need the website to include cookies in the requests sent
     // to the API (e.g. in case you use sessions)
-    //res.setHeader('Access-Control-Allow-Credentials', true);
+    res.setHeader('Access-Control-Allow-Credentials', true);
 
+    if ( req.method === 'OPTIONS' ) {
+      console.log('OPTIONS SUCCESS');
+      res.status(200).send();
+    } else {
+      next();
+    }
     // Pass to next layer of middleware
-    next();
+    
 });
 
 // var UserController = require('./controllers/UserController');
