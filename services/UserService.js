@@ -25,6 +25,7 @@ class UserService {
             } else {
               const list = users.map((row) => {
                 return {
+                  id : row._id,
                   email : row.email,
                   firstName : row.firstName,
                   lastName : row.lastName,
