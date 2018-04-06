@@ -26,9 +26,9 @@ router.post('/', function (req, res) {
   console.log(userObj)
   userObj.save(function(err, results) {
     if(err) {
-      return res.status(500).send("Some error occured." + err);
+      return res.status(500).json({success: false, error: err});
     }
-    return res.status(201).send("User info added.");
+    return res.status(201).json({success: true, id: userObj._id});
   });
   /*User.create({
     email : req.body.email,
@@ -110,7 +110,7 @@ router.get('/:id', function (req, res) {
           education : user.education,
           occupation : user.occupation,
           currentLocation : user.currentLocation,
-          perLocation : user.perLocation
+          permLocation : user.permLocation
         });
     });
 
@@ -133,7 +133,7 @@ router.put('/:id', function (req, res) {
     userObj.education = req.body.education;
     userObj.occupation = req.body.occupation;
     userObj.currentLocation = req.body.currentLocation;
-    userObj.perLocation = req.body.perLocation;
+    userObj.permLocation = req.body.permLocation;
     userObj.save(function(err, results) {
       if(err) {
         return res.status(500).send("Some error occured.");
